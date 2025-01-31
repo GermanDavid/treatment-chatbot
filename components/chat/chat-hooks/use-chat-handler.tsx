@@ -99,6 +99,16 @@ export const useChatHandler = () => {
     setSelectedTools([])
     setToolInUse("none")
 
+    const chatSettings = {
+      model: "gpt-3.5-turbo" as LLMID,
+      prompt: "",
+      temperature: 0.7,
+      contextLength: 4096,
+      includeProfileContext: true,
+      includeWorkspaceInstructions: true,
+      embeddingsProvider: "openai" as "openai" | "local"
+    }
+
     if (selectedAssistant) {
       setChatSettings({
         model: selectedAssistant.model as LLMID,
@@ -157,22 +167,21 @@ export const useChatHandler = () => {
           | "local"
       })
     } else if (selectedWorkspace) {
-      // setChatSettings({
-      //   model: (selectedWorkspace.default_model ||
-      //     "gpt-4-1106-preview") as LLMID,
-      //   prompt:
-      //     selectedWorkspace.default_prompt ||
-      //     "You are a friendly, helpful AI assistant.",
-      //   temperature: selectedWorkspace.default_temperature || 0.5,
-      //   contextLength: selectedWorkspace.default_context_length || 4096,
-      //   includeProfileContext:
-      //     selectedWorkspace.include_profile_context || true,
-      //   includeWorkspaceInstructions:
-      //     selectedWorkspace.include_workspace_instructions || true,
-      //   embeddingsProvider:
-      //     (selectedWorkspace.embeddings_provider as "openai" | "local") ||
-      //     "openai"
-      // })
+      setChatSettings({
+        model: "gpt-3.5-turbo" as LLMID,
+        prompt:
+          selectedWorkspace.default_prompt ||
+          "You are a friendly, helpful AI assistant.",
+        temperature: selectedWorkspace.default_temperature || 0.5,
+        contextLength: selectedWorkspace.default_context_length || 4096,
+        includeProfileContext:
+          selectedWorkspace.include_profile_context || true,
+        includeWorkspaceInstructions:
+          selectedWorkspace.include_workspace_instructions || true,
+        embeddingsProvider:
+          (selectedWorkspace.embeddings_provider as "openai" | "local") ||
+          "openai"
+      })
     }
 
     return router.push(`/${selectedWorkspace.id}/chat`)

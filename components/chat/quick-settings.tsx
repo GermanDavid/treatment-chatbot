@@ -59,6 +59,20 @@ export const QuickSettings: FC<QuickSettingsProps> = ({}) => {
     }
   }, [isOpen])
 
+  useEffect(() => {
+    if (!chatSettings) {
+      setChatSettings({
+        model: "gpt-3.5-turbo" as LLMID,
+        prompt: "",
+        temperature: 0.7,
+        contextLength: 4096,
+        includeProfileContext: true,
+        includeWorkspaceInstructions: true,
+        embeddingsProvider: "openai" as "openai" | "local"
+      })
+    }
+  }, [])
+
   const handleSelectQuickSetting = async (
     item: Tables<"presets"> | Tables<"assistants"> | null,
     contentType: "presets" | "assistants" | "remove"
