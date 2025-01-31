@@ -11,7 +11,8 @@ import {
   IconCircleFilled,
   IconFileText,
   IconMoodSmile,
-  IconPencil
+  IconPencil,
+  IconRobotFace
 } from "@tabler/icons-react"
 import Image from "next/image"
 import { FC, useContext, useEffect, useRef, useState } from "react"
@@ -189,112 +190,47 @@ export const Message: FC<MessageProps> = ({
       >
         <div className="relative flex w-full flex-col p-6 sm:w-[550px] sm:px-0 md:w-[650px] lg:w-[650px] xl:w-[700px]">
           <div className="absolute left-5 top-7 sm:left-0">
-            <MessageActions
-              onCopy={handleCopy}
-              onEdit={handleStartEdit}
-              isAssistant={message.role === "assistant"}
-              isLast={isLast}
-              isEditing={isEditing}
-              isHovering={isHovering}
-              onRegenerate={handleRegenerate}
-            />
+            <div className="flex gap-12">
+              <MessageActions
+                onCopy={handleCopy}
+                onEdit={handleStartEdit}
+                isAssistant={message.role === "assistant"}
+                isLast={isLast}
+                isEditing={isEditing}
+                isHovering={isHovering}
+                onRegenerate={handleRegenerate}
+              />
+            </div>
           </div>
-          <div className="space-y-3">
-            {message.role === "system" ? (
-              <div className="flex items-center space-x-4">
-                <IconPencil
-                  className="border-primary bg-primary text-secondary rounded border-DEFAULT p-1"
-                  size={ICON_SIZE}
-                />
-
-                <div className="text-lg font-semibold">Prompt</div>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                {message.role === "assistant" ? (
-                  messageAssistantImage ? (
-                    <Image
-                      style={{
-                        width: `${ICON_SIZE}px`,
-                        height: `${ICON_SIZE}px`
-                      }}
-                      className="rounded"
-                      src={messageAssistantImage}
-                      alt="assistant image"
-                      height={ICON_SIZE}
-                      width={ICON_SIZE}
-                    />
-                  ) : (
-                    <WithTooltip
-                      display={<div>{MODEL_DATA?.modelName}</div>}
-                      trigger={
-                        <ModelIcon
-                          provider={modelDetails?.provider || "custom"}
-                          height={ICON_SIZE}
-                          width={ICON_SIZE}
-                        />
-                      }
-                    />
-                  )
-                ) : profile?.image_url ? (
+          <div className="mb-4 flex items-center gap-4">
+            {message.role === "assistant" ? (
+              <>
+                {selectedAssistant?.image_path ? (
                   <Image
-                    className={`size-[32px] rounded`}
-                    src={profile?.image_url}
-                    height={32}
-                    width={32}
-                    alt="user image"
+                    className="rounded"
+                    src={selectedAssistantImage || ""}
+                    alt="Assistant"
+                    width={30}
+                    height={30}
                   />
                 ) : (
-                  <IconMoodSmile
-                    className="bg-primary text-secondary border-primary rounded border-DEFAULT p-1"
-                    size={ICON_SIZE}
-                  />
+                  <IconRobotFace size={30} />
                 )}
-
-                <div className="font-semibold">
-                  {message.role === "assistant"
-                    ? message.assistant_id
-                      ? assistants.find(
-                          assistant => assistant.id === message.assistant_id
-                        )?.name
-                      : selectedAssistant
-                        ? selectedAssistant?.name
-                        : MODEL_DATA?.modelName
-                    : profile?.display_name ?? profile?.username}
+                <div className="text-xl font-bold">
+                  {selectedAssistant?.name || "Assistant"}
                 </div>
-              </div>
-            )}
-            {!firstTokenReceived &&
-            isGenerating &&
-            isLast &&
-            message.role === "assistant" ? (
-              <>
-                {(() => {
-                  switch (toolInUse) {
-                    case "none":
-                      return (
-                        <IconCircleFilled className="animate-pulse" size={20} />
-                      )
-                    case "retrieval":
-                      return (
-                        <div className="flex animate-pulse items-center space-x-2">
-                          <IconFileText size={20} />
-
-                          <div>Searching files...</div>
-                        </div>
-                      )
-                    default:
-                      return (
-                        <div className="flex animate-pulse items-center space-x-2">
-                          <IconBolt size={20} />
-
-                          <div>Using {toolInUse}...</div>
-                        </div>
-                      )
-                  }
-                })()}
               </>
-            ) : isEditing ? (
+            ) : (
+              <>
+                <IconMoodSmile size={30} />
+                <div className="text-xl font-bold">
+                  {profile?.display_name || "User"}
+                </div>
+              </>
+            )}
+          </div>
+          <div className="space-y-3">
+            {isEditing ? (
               <TextareaAutosize
                 textareaRef={editInputRef}
                 className="text-md"
