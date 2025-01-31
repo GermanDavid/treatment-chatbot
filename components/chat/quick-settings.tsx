@@ -60,18 +60,20 @@ export const QuickSettings: FC<QuickSettingsProps> = ({}) => {
   }, [isOpen])
 
   useEffect(() => {
-    if (!chatSettings) {
+    if (!chatSettings || chatSettings.model !== "gpt-3.5-turbo") {
       setChatSettings({
         model: "gpt-3.5-turbo" as LLMID,
-        prompt: "",
-        temperature: 0.7,
-        contextLength: 4096,
-        includeProfileContext: true,
-        includeWorkspaceInstructions: true,
-        embeddingsProvider: "openai" as "openai" | "local"
+        prompt: chatSettings?.prompt || "",
+        temperature: chatSettings?.temperature || 0.7,
+        contextLength: chatSettings?.contextLength || 4096,
+        includeProfileContext: chatSettings?.includeProfileContext || true,
+        includeWorkspaceInstructions:
+          chatSettings?.includeWorkspaceInstructions || true,
+        embeddingsProvider:
+          chatSettings?.embeddingsProvider || ("openai" as "openai" | "local")
       })
     }
-  }, [])
+  }, [chatSettings])
 
   const handleSelectQuickSetting = async (
     item: Tables<"presets"> | Tables<"assistants"> | null,
@@ -120,7 +122,7 @@ export const QuickSettings: FC<QuickSettingsProps> = ({}) => {
       setSelectedTools([])
       if (selectedWorkspace) {
         setChatSettings({
-          model: selectedWorkspace.default_model as LLMID,
+          model: "gpt-3.5-turbo" as LLMID,
           prompt: selectedWorkspace.default_prompt,
           temperature: selectedWorkspace.default_temperature,
           contextLength: selectedWorkspace.default_context_length,
