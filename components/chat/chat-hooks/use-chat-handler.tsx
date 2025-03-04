@@ -144,18 +144,19 @@ export const useChatHandler = () => {
 
       if (allFiles.length > 0) setShowFilesDisplay(true)
     } else if (selectedPreset) {
-      setChatSettings({
-        model: selectedPreset.model as LLMID,
-        prompt: selectedPreset.prompt,
-        temperature: selectedPreset.temperature,
-        contextLength: selectedPreset.context_length,
-        includeProfileContext: selectedPreset.include_profile_context,
-        includeWorkspaceInstructions:
-          selectedPreset.include_workspace_instructions,
-        embeddingsProvider: selectedPreset.embeddings_provider as
-          | "openai"
-          | "local"
-      })
+      // Preset settings are not currently used
+      // setChatSettings({
+      //   model: selectedPreset.model as LLMID,
+      //   prompt: selectedPreset.prompt,
+      //   temperature: selectedPreset.temperature,
+      //   contextLength: selectedPreset.context_length,
+      //   includeProfileContext: selectedPreset.include_profile_context,
+      //   includeWorkspaceInstructions:
+      //     selectedPreset.include_workspace_instructions,
+      //   embeddingsProvider: selectedPreset.embeddings_provider as
+      //     | "openai"
+      //     | "local"
+      // })
     } else if (selectedWorkspace) {
       setChatSettings({
         model: (selectedWorkspace.default_model ||
