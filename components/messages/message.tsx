@@ -202,28 +202,16 @@ export const Message: FC<MessageProps> = ({
               />
             </div>
           </div>
-          <div className="mb-4 flex items-center gap-4">
+          <div className="mb-4 flex items-center gap-6">
             {message.role === "assistant" ? (
               <>
-                {selectedAssistant?.image_path ? (
-                  <Image
-                    className="rounded"
-                    src={selectedAssistantImage || ""}
-                    alt="Assistant"
-                    width={30}
-                    height={30}
-                  />
-                ) : (
-                  <IconRobotFace size={30} />
-                )}
-                <div className="text-xl font-bold">
+                <div className="mr-2 text-xl font-bold">
                   {selectedAssistant?.name || "Assistant"}
                 </div>
               </>
             ) : (
               <>
-                <IconMoodSmile size={30} />
-                <div className="text-xl font-bold">
+                <div className="mr-2 text-xl font-bold">
                   {profile?.display_name || "User"}
                 </div>
               </>
